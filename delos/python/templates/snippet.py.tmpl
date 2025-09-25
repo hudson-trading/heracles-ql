@@ -1,0 +1,6 @@
+{{ range $module := .Imports }}
+from {{$module}} import *
+{{ end }}
+
+def VECTOR():
+    return {{.Code}}

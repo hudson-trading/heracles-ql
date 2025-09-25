@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Heracles Live Developer Wizard</title>
+        <style type="text/css">
+            body, html
+            {
+                margin: 0; padding: 0; height: 100%; overflow: hidden;
+            }
+
+            #content
+            {
+                position:absolute; left: 0; right: 0; bottom: 0; top: 0px;
+            }
+        </style>
+    </head>
+    <body>
+    </body>
+  <script type="text/javascript">
+  var iframe = document.createElement("iframe")
+  iframe.setAttribute("width", "100%")
+  iframe.setAttribute("height", "100%")
+  iframe.setAttribute("frameborder", "0")
+  iframe.setAttribute("src", "http://" + window.location.host + "/select/0/vmui/")
+  document.body.appendChild(iframe)
+
+
+  updateFunc = async function() {
+    params = URL.parse(window.frames[0].location.href).hash.substr(3)
+
+    try {
+      resp = await fetch(
+        "/dev/query?" + params,
+        {signal: AbortSignal.timeout(900)}
+      )
+
+      if (!resp.ok) {
+        console.error(`error communicating with server: ${resp.status}`)
+        return
+      }
+
+      if (resp.status == 204) {
+        console.debug("query is unchanged, skipping reload")
+        return
+      }
+
+      result = await resp.json()
+      if (result.query !== undefined) {
+        console.log("reloading: " + result.query)
+        iframe.setAttribute("src", "http://" + window.location.host + "/select/0/vmui/#/?" + result.query)
+      } else {
+        consol.error("got a status 200 response, but there was no data")
+      }
+    } catch (error) {
+      console.error(error)
+      return
+    }
+  }
+
+  setTimeout(updateFunc, 0)
+  setInterval(updateFunc, 1000)
+
+
+  </script>
+</html>
