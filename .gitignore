@@ -1,0 +1,4 @@
+pkg
+build
+*.pyc
+__pycache__
