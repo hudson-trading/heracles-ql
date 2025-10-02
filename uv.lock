@@ -12,6 +12,19 @@ wheels = [
 ]
 
 [[package]]
+name = "auditwheel"
+version = "6.4.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+    { name = "pyelftools" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/26/a0/8d998628f1d899420a621fcd7b46825cb96f23b5b52c2b93f4f814ae9c59/auditwheel-6.4.2.tar.gz", hash = "sha256:b7a61afc9183b6b5c661de59ca586f9c7200445a409c58cdf2049d6f71636d51", size = 4694856, upload-time = "2025-07-27T07:14:33.527Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d6/66/d790dc341d93c80e1ee61f2580177d7ee2e3e16dc100c36889b8bd176acf/auditwheel-6.4.2-py3-none-any.whl", hash = "sha256:4302ae79dcff242e799a37173cfeeae727d0924843eca4b3f622d3bcb28de2db", size = 50876, upload-time = "2025-07-27T07:13:27.565Z" },
+]
+
+[[package]]
 name = "click"
 version = "8.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -34,7 +47,7 @@ wheels = [
 
 [[package]]
 name = "heracles-ql"
-version = "0.6.3"
+version = "0.1.0"
 source = { editable = "." }
 
 [package.optional-dependencies]
@@ -45,6 +58,7 @@ config = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "auditwheel" },
     { name = "marko" },
     { name = "mypy" },
     { name = "pydantic" },
@@ -63,6 +77,7 @@ provides-extras = ["config"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "auditwheel", specifier = ">=6.4.2" },
     { name = "marko", specifier = ">=2.2.0" },
     { name = "mypy", specifier = ">=1.17.1" },
     { name = "pydantic", specifier = ">=2.11.7" },
@@ -263,6 +278,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/b8/e9/1f7efbe20d0b2b10f6718944b5d8ece9152390904f29a78e68d4e7961159/pydantic_core-2.33.2-pp311-pypy311_pp73-musllinux_1_1_armv7l.whl", hash = "sha256:de4b83bb311557e439b9e186f733f6c645b9417c84e2eb8203f3f820a4b988bf", size = 2239013, upload-time = "2025-04-23T18:33:26.621Z" },
     { url = "https://files.pythonhosted.org/packages/3c/b2/5309c905a93811524a49b4e031e9851a6b00ff0fb668794472ea7746b448/pydantic_core-2.33.2-pp311-pypy311_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:82f68293f055f51b51ea42fafc74b6aad03e70e191799430b90c13d643059ebb", size = 2238715, upload-time = "2025-04-23T18:33:28.656Z" },
     { url = "https://files.pythonhosted.org/packages/32/56/8a7ca5d2cd2cda1d245d34b1c9a942920a718082ae8e54e5f3e5a58b7add/pydantic_core-2.33.2-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:329467cecfb529c925cf2bbd4d60d2c509bc2fb52a20c1045bf09bb70971a9c1", size = 2066757, upload-time = "2025-04-23T18:33:30.645Z" },
+]
+
+[[package]]
+name = "pyelftools"
+version = "0.32"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b9/ab/33968940b2deb3d92f5b146bc6d4009a5f95d1d06c148ea2f9ee965071af/pyelftools-0.32.tar.gz", hash = "sha256:6de90ee7b8263e740c8715a925382d4099b354f29ac48ea40d840cf7aa14ace5", size = 15047199, upload-time = "2025-02-19T14:20:05.549Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/af/43/700932c4f0638c3421177144a2e86448c0d75dbaee2c7936bda3f9fd0878/pyelftools-0.32-py3-none-any.whl", hash = "sha256:013df952a006db5e138b1edf6d8a68ecc50630adbd0d83a2d41e7f846163d738", size = 188525, upload-time = "2025-02-19T14:19:59.919Z" },
 ]
 
 [[package]]

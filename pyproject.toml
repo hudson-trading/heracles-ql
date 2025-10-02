@@ -1,6 +1,6 @@
 [project]
 name = "heracles-ql"
-version = "0.6.3"
+version = "0.1.0"
 description = "heralces-ql VictoriaMetrics DSL"
 readme = "README.md"
 authors = [{name = "Hudson River Trading LLC", email="opensource@hudson-trading.com"}]
@@ -27,6 +27,7 @@ config = [
 
 [dependency-groups]
 dev = [
+    "auditwheel>=6.4.2",
     "marko>=2.2.0",
     "mypy>=1.17.1",
     "pydantic>=2.11.7",
