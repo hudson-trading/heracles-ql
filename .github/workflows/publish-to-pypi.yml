@@ -1,0 +1,38 @@
+name: "Publish"
+
+on:
+  push:
+    tags:
+      # Publish on any tag starting with a `v`, e.g., v0.1.0
+      - v*
+
+# TODO: publish wheels for more platforms
+# TODO: test built wheel
+jobs:
+  build: Build distribution
+  runs-on: ubuntu-latest
+
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+
+    - name: "Set up Python"
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: ".python-version"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+
+    - name: Build format-lib
+      run: make format-lib
+
+    - name: Run tests
+      run: uv run --locked --all-extras --dev pytest
+
+    - name: Build wheel
+      run: uv build --wheel 
+
+    - name: Publish to PyPi
+      run: uv publish
