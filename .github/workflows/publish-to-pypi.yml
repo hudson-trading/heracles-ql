@@ -40,10 +40,10 @@ jobs:
         run: uv run --locked --all-extras --dev pytest
 
       - name: Build wheel
-        run: uv build --wheel 
+        run: uv build 
 
       - name: Auditwheel repair wheel
         run: uv run --dev auditwheel repair dist/*.whl
 
       - name: Publish repaired wheel to PyPi
-        run: uv publish wheelhouse/*
+        run: uv publish wheelhouse/* dist/*.tar.gz
