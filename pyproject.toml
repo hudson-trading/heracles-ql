@@ -1,6 +1,6 @@
 [project]
 name = "heracles-ql"
-version = "0.1.0"
+version = "0.1.1"
 description = "heralces-ql VictoriaMetrics DSL"
 readme = "README.md"
 authors = [{name = "Hudson River Trading LLC", email="opensource@hudson-trading.com"}]
@@ -14,10 +14,6 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["heracles"]
 
-[tool.uv]
-# this is needed so that UV always builds the formatlib, even when
-# it thinks it has a cached copy of the heracles python package
-reinstall-package = ["heracles-ql"]
 
 [project.optional-dependencies]
 config = [
@@ -37,12 +33,28 @@ dev = [
     "wheel>=0.45.1",
 ]
 
+[tool.uv]
+# setting these cache keys ensures uv will rebuild the project when any Go source
+# files change. It DOES NOT protect against deleteing the pkg directory, so in those
+# cases the user still must be uv sync --reinstall-package heracles-ql
+cache-keys = [
+  { file = "pyproject.toml" },
+  { file = "formatter/**" },
+  { git = { commit = true } },
+]
 
 # this line includes hatch_build.py as a build plugin
 [tool.hatch.build.targets.wheel.hooks.custom]
 
 [tool.hatch.build.targets.wheel.force-include]
 "pkg/formatter.so" = "pkg/formatter.so"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "formatter/**",
+  "heracles/**"
+]
+
 
 [tool.ruff]
 select = [

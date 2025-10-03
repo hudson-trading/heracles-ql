@@ -7,4 +7,15 @@ class BuildSharedObjectd(BuildHookInterface):
     def initialize(self, version, build_data):
         build_data["pure_python"] = False
 
-        subprocess.check_output(["make", "format-lib"])
+        subprocess.check_output(
+            [
+                "go",
+                "build",
+                "-C",
+                "formatter",
+                "-buildmode=c-shared",
+                "-o",
+                "../pkg/formatter.so",
+                "formatter.go",
+            ]
+        )
