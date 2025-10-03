@@ -16,6 +16,10 @@ Highlights include:
 
 HeraclesQL is available on PyPi. Just `pip install heracles-ql`
 
+HeraclesQL depends on native code in a few places. Right now, we provide binaries for `manylinux_2_34_x86_64`.
+
+Otherwise, we provide an sdist that includes the native source code. In order to build the sdist, you'll need a
+modern Go compiler.
 
 ## Example
 
