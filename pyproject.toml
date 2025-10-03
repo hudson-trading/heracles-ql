@@ -1,6 +1,6 @@
 [project]
 name = "heracles-ql"
-version = "0.1.0"
+version = "0.1.1"
 description = "heralces-ql VictoriaMetrics DSL"
 readme = "README.md"
 authors = [{name = "Hudson River Trading LLC", email="opensource@hudson-trading.com"}]
