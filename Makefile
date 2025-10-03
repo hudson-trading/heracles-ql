@@ -6,7 +6,7 @@ venv:
 
 
 dist:
-	uv build --wheel
+	uv build
 
 download-docs:
 	mkdir -p dist/vm-docs
@@ -37,5 +37,6 @@ clean:
 	rm --one-file-system -r .venv
 	rm --one-file-system -r dist
 	rm --one-file-system -r pkg
+	rm --one-file-system -r wheelhouse
 
 .PHONY: venv dist download-docs generate_funcs test clean format-lib check_generated_funcs
