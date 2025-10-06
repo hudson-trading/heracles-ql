@@ -54,8 +54,8 @@ cache-keys = [
 [tool.hatch.build.targets.sdist]
 include = [
   "formatter/**",
-  "hermes/**",
   "heracles/**"
+  "hermes/**",
 ]
 
 

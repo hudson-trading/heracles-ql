@@ -1,4 +1,4 @@
-module github.com/hudson-traidng/heracles.git/hermes
+module github.com/hudson-trading/heracles.git/hermes
 
 go 1.25.0
 
