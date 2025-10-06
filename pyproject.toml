@@ -40,6 +40,7 @@ dev = [
 cache-keys = [
   { file = "pyproject.toml" },
   { file = "formatter/**" },
+  { file = "hermes/**" },
   { git = { commit = true } },
 ]
 
@@ -48,11 +49,13 @@ cache-keys = [
 
 [tool.hatch.build.targets.wheel.force-include]
 "pkg/formatter.so" = "pkg/formatter.so"
+"pkg/hermes" = "pkg/hermes"
 
 [tool.hatch.build.targets.sdist]
 include = [
   "formatter/**",
-  "heracles/**"
+  "heracles/**",
+  "hermes/**",
 ]
 
 
