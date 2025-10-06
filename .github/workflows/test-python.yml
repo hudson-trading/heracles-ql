@@ -1,0 +1,23 @@
+name: "Test Python"
+
+on: [push]
+
+jobs:
+  run_pytest:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Run all tests 
+        run: uv run --all-extras --dev pytest 
