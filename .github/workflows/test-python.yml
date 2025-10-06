@@ -3,7 +3,7 @@ name: "Test Python"
 on: [push]
 
 jobs:
-  run:
+  run_pytest:
     runs-on: ubuntu-latest
     
     steps:
