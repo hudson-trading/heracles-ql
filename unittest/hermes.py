@@ -82,8 +82,6 @@ class ExpressionTestResult(pydantic.BaseModel):
 class HermesError(Exception):
     """Base exception for Hermes-related errors."""
 
-    pass
-
 
 class Hermes:
     """Python API for running tests using the Hermes binary."""
