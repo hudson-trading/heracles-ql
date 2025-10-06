@@ -19,3 +19,15 @@ class BuildSharedObjectd(BuildHookInterface):
                 "formatter.go",
             ]
         )
+
+        subprocess.check_output(
+            [
+                "go",
+                "build",
+                "-C",
+                "hermes",
+                "-o",
+                "../pkg/hermes",
+                "main.go",
+            ]
+        )
