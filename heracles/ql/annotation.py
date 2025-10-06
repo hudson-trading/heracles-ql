@@ -15,11 +15,9 @@ class AssertionAnnotation(Generic[_T], ql.Annotation[_T]):
 _AT = TypeVar("_AT")
 
 
-def assertion() -> (
-    Callable[
-        [Callable[[_AT], ql.InstantVector]], Callable[[_AT], AssertionAnnotation[_AT]]
-    ]
-):
+def assertion() -> Callable[
+    [Callable[[_AT], ql.InstantVector]], Callable[[_AT], AssertionAnnotation[_AT]]
+]:
     def annotation_func(
         f: Callable[[_AT], ql.InstantVector],
     ) -> Callable[[_AT], AssertionAnnotation[_AT]]:

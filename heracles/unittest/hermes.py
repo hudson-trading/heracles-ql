@@ -145,8 +145,7 @@ class Hermes:
             output_data = json.loads(result.stdout)
         except json.JSONDecodeError as e:
             raise HermesError(
-                f"Failed to parse Hermes output as JSON: {e}\n"
-                f"Output: {result.stdout}"
+                f"Failed to parse Hermes output as JSON: {e}\nOutput: {result.stdout}"
             ) from e
 
         if test_case.rule:

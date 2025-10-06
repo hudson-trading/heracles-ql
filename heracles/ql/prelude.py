@@ -355,7 +355,7 @@ class SelectedInstantVector(InstantVector):
                 op = v.kind.value
                 v = v.value
             selectors.append(f"{k}{op}{json.dumps(v)}")
-        matchers = f'{{{ ",".join(selectors)}}}'
+        matchers = f"{{{','.join(selectors)}}}"
         if self.name:
             return self.name + matchers
         else:

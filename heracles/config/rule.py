@@ -638,7 +638,9 @@ class RuleBundle:
     def _rename_alert_rule(cls, name: str) -> str:
         return "".join(c[0].upper() + c[1:] for c in name.split("_"))
 
-    def _alert_annotation(self, name: str | None, **kwargs: Any) -> Callable[
+    def _alert_annotation(
+        self, name: str | None, **kwargs: Any
+    ) -> Callable[
         [Callable[_P, _ParameterizableAlertReturn]],
         Callable[_P, _ParameterizableAlertReturn],
     ]:
@@ -656,7 +658,9 @@ class RuleBundle:
         return annotation
 
     @overload
-    def alert(self, name: str | None = None, /, **kwargs: Any) -> Callable[
+    def alert(
+        self, name: str | None = None, /, **kwargs: Any
+    ) -> Callable[
         [Callable[_P, _ParameterizableAlertReturn]],
         Callable[_P, _ParameterizableAlertReturn],
     ]: ...
@@ -730,7 +734,9 @@ class RuleBundle:
     def _rename_recording_rule(cls, name: str) -> str:
         return name.replace("_", ":")
 
-    def _recording_annotation(self, name: str | None, **kwargs: Any) -> Callable[
+    def _recording_annotation(
+        self, name: str | None, **kwargs: Any
+    ) -> Callable[
         [Callable[_P, _ParameterizableRecordingReturn]],
         Callable[_P, _ParameterizableRecordingReturn],
     ]:
@@ -760,7 +766,9 @@ class RuleBundle:
         self._rules.append(self._curry_wrapper(wrapper))
 
     @overload
-    def record(self, name: str | None = None, /, **kwargs: Any) -> Callable[
+    def record(
+        self, name: str | None = None, /, **kwargs: Any
+    ) -> Callable[
         [Callable[_P, _ParameterizableRecordingReturn]],
         Callable[_P, _ParameterizableRecordingReturn],
     ]: ...
