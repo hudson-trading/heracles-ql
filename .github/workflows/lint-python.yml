@@ -39,4 +39,4 @@ jobs:
         uses: astral-sh/setup-uv@v6
 
       - name: Run mypy  
-        run: uv run --all-extras --dev pytest heracles
+        run: uv run --all-extras --dev mypy heracles
