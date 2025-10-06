@@ -1,15 +1,18 @@
 [project]
 name = "heracles-ql"
-version = "0.1.1"
 description = "heralces-ql VictoriaMetrics DSL"
 readme = "README.md"
 authors = [{name = "Hudson River Trading LLC", email="opensource@hudson-trading.com"}]
 requires-python = ">=3.11"
 dependencies = []
+dynamic = ["version"]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "uv-dynamic-versioning"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
 
 [tool.hatch.build.targets.wheel]
 packages = ["heracles"]
