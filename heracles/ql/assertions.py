@@ -28,3 +28,8 @@ def assert_exactly_one(
         return ql.count(vector).by(*by_labels) != 1
 
     return assert_exactly_one
+
+
+@annotation.assertion()
+def assert_exists(vector: ql.InstantVector) -> ql.InstantVector:
+    return ql.absent(vector)

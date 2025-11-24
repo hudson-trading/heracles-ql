@@ -187,21 +187,28 @@ class Annotation(Generic[_TARGET], abc.ABC):
         self.target = target
 
 
+AppliableAnnotation = Callable[[_TARGET], Annotation[_TARGET]]
+
+
 class Timeseries(AcceptsVisitor, Renderable, abc.ABC):
     def __init__(self) -> None:
         super().__init__()
-        self.annotations: list[Annotation[Self]] = []
+        self._annotations: list[AppliableAnnotation[Self]] = []
 
-    def annotate(self, annotation: Callable[[Self], Annotation[Self]]) -> Self:
-        self.annotations.append(annotation(self))
+    def annotate(self, annotation: AppliableAnnotation[Self]) -> Self:
+        self._annotations.append(annotation)
         return self
 
+    @property
+    def annotations(self) -> list[Annotation[Self]]:
+        return [a(self) for a in self._annotations]
+
     def is_annotated(self) -> bool:
-        return bool(self.annotations)
+        return bool(self._annotations)
 
     def without_annotations(self) -> Self:
         copied = copy.copy(self)
-        copied.annotations = []
+        copied._annotations = []
         return copied
 
     pass
@@ -326,7 +333,13 @@ def _instant_vector_binop(
 
 
 class SelectedInstantVector(InstantVector):
-    def __init__(self, /, *, name: str | None, **kwargs: MatcherExpr) -> None:
+    def __init__(
+        self,
+        /,
+        *,
+        name: str | None,
+        **kwargs: MatcherExpr,
+    ) -> None:
         super().__init__()
         self._selectors: dict[str, MatcherExpr] = {}
         self.name = name
@@ -343,6 +356,9 @@ class SelectedInstantVector(InstantVector):
 
     def __call__(self, **kwargs: Any) -> SelectedInstantVector:
         res_vec = SelectedInstantVector(name=self.name, **self._selectors)
+        # SelectedInstantVector is special - selecting causes this node to be
+        # replaced with the selector, so the annotations should propogate
+        res_vec._annotations = self._annotations  # type: ignore
         for name, value in kwargs.items():
             res_vec._selectors[name] = value
         return res_vec

@@ -101,3 +101,33 @@ def test_rename_recording_rule() -> None:
         == "many:under:scores"
     )
     assert config.RuleBundle._rename_recording_rule("a_b_c") == "a:b:c"
+
+
+def test_assertion_extraction() -> None:
+    rules = config.RuleBundle(name="test_bundle")
+
+    with rules.context(config.AlertsForAssertions()):
+
+        @rules.alert()
+        def TestingRule() -> config.Alert:
+            selected = rules.vectors().must.example_metric(foo="bar")
+            return config.SimpleAlert(
+                expr=selected * 42,
+                for_=5 * ql.Minute,
+                fire_for=10 * ql.Minute,
+                labels={
+                    "severity": "warning",
+                    "some_other_label": "foobar",
+                },
+                annotations={
+                    "example": "example",
+                },
+            )
+
+    dumped_rules = list(rules.dump())
+    assert len(dumped_rules) == 2
+
+    assert dumped_rules[0].name == "TestingRule"
+    assert dumped_rules[0].expr.render() == '(example_metric{foo="bar"} * 42.0)'
+    assert dumped_rules[1].name == "TestingRuleInvalidData"
+    assert dumped_rules[1].expr.render() == 'absent(example_metric{foo="bar"})'

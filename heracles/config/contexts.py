@@ -67,7 +67,9 @@ class AlertForMissingData(
         )
 
 
-class AlertsForAssertions(config.RuleContext):
+class AlertsForAssertions(
+    config.RuleContext, config.AfterRealizeHookMixin[RealizedAlert]
+):
     def after_realize(
         self, bundle: config.BundleReference, rule: config.RealizedAlert
     ) -> None:
