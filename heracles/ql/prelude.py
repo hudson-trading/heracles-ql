@@ -870,4 +870,4 @@ def NR(value: str) -> Matcher:
     return Matcher(value, MatcherKind.NotRegex)
 
 
-MatcherExpr = str | Matcher | tuple[str | Matcher]
+MatcherExpr = str | Matcher | tuple[str | Matcher, ...]
