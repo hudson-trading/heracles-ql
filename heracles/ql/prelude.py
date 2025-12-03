@@ -366,19 +366,19 @@ class SelectedInstantVector(InstantVector):
     def render(self) -> str:
         selectors = []
 
-        def add_selector(v: str | Matcher):
+        def render_matcher(k: str, v: str | Matcher) -> str:
             op = "="
             if isinstance(v, Matcher):
                 op = v.kind.value
                 v = v.value
-            selectors.append(f"{k}{op}{json.dumps(v)}")
+            return f"{k}{op}{json.dumps(v)}"
 
         for k, v in self._selectors.items():
             if isinstance(v, tuple):
                 for inner_v in v:
-                    add_selector(inner_v)
+                    selectors.append(render_matcher(k, inner_v))
             else:
-                add_selector(v)
+                selectors.append(render_matcher(k, v))
 
         matchers = f"{{{','.join(selectors)}}}"
         if self.name:
