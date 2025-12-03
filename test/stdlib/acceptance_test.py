@@ -97,6 +97,12 @@ def test_all_binops_implemented(
             'example_vector{instance="foo"}',
         ),
         (
+            ql.SelectedInstantVector(name="example_vector")(
+                instance=("foo", ql.NR("bar.*"))
+            ),
+            'example_vector{instance="foo",instance!~"bar.*"}',
+        ),
+        (
             ql.SelectedInstantVector(name="example_vector")(instance="foo")[
                 4 * ql.Minute
             ],
