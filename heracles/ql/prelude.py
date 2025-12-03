@@ -365,12 +365,21 @@ class SelectedInstantVector(InstantVector):
 
     def render(self) -> str:
         selectors = []
-        for k, v in self._selectors.items():
+
+        def add_selector(v: str | Matcher):
             op = "="
             if isinstance(v, Matcher):
                 op = v.kind.value
                 v = v.value
             selectors.append(f"{k}{op}{json.dumps(v)}")
+
+        for k, v in self._selectors.items():
+            if isinstance(v, tuple):
+                for inner_v in v:
+                    add_selector(inner_v)
+            else:
+                add_selector(v)
+
         matchers = f"{{{','.join(selectors)}}}"
         if self.name:
             return self.name + matchers
@@ -861,4 +870,4 @@ def NR(value: str) -> Matcher:
     return Matcher(value, MatcherKind.NotRegex)
 
 
-MatcherExpr = str | Matcher
+MatcherExpr = str | Matcher | tuple[str | Matcher]
