@@ -37,7 +37,7 @@ jobs:
         run: make format-lib
 
       - name: Run tests
-        run: uv run --locked --all-extras --dev pytest
+        run: uv run --all-extras --dev pytest
 
       - name: Build wheel
         run: uv build 
