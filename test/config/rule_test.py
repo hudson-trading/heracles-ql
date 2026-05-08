@@ -9,7 +9,7 @@ def test_serialization_has_expected_fields() -> None:
         return config.SimpleAlert(
             expr=rules.vectors().example_metric * 42,
             for_=5 * ql.Minute,
-            fire_for=10 * ql.Minute,
+            keep_firing_for=10 * ql.Minute,
             labels={
                 "severity": "warning",
                 "some_other_label": "foobar",
@@ -52,7 +52,7 @@ def test_serialization_has_expected_fields() -> None:
         "alert": "TestingRule",
         "expr": "example_metric * 42.0",
         "for": "5m",
-        "fire_for": "10m",
+        "keep_firing_for": "10m",
         "labels": {
             "severity": "warning",
             "some_other_label": "foobar",
@@ -114,7 +114,7 @@ def test_assertion_extraction() -> None:
             return config.SimpleAlert(
                 expr=selected * 42,
                 for_=5 * ql.Minute,
-                fire_for=10 * ql.Minute,
+                keep_firing_for=10 * ql.Minute,
                 labels={
                     "severity": "warning",
                     "some_other_label": "foobar",
