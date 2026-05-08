@@ -134,7 +134,7 @@ class Alert(Rule["RealizedAlert"], abc.ABC):
 
     @property
     @abc.abstractmethod
-    def fire_for(self) -> ql.Duration | None: ...
+    def keep_firing_for(self) -> ql.Duration | None: ...
 
     @property
     @abc.abstractmethod
@@ -146,7 +146,7 @@ class SimpleAlert(Alert):
     _expr: Expr[RealizedAlert]
     _name: str | None
     _for_: ql.Duration | None
-    _fire_for: ql.Duration | None
+    _keep_firing_for: ql.Duration | None
     _labels: dict[str, str]
     _annotations: dict[str, str]
 
@@ -157,14 +157,14 @@ class SimpleAlert(Alert):
         expr: Expr[RealizedAlert],
         name: str | None = None,
         for_: ql.Duration | None = None,
-        fire_for: ql.Duration | None = None,
+        keep_firing_for: ql.Duration | None = None,
         labels: dict[str, str] | None = None,
         annotations: dict[str, str] | None = None,
     ) -> None:
         self._expr = expr
         self._name = name
         self._for_ = for_
-        self._fire_for = fire_for
+        self._keep_firing_for = keep_firing_for
         self._labels = labels or {}
         self._annotations = annotations or {}
 
@@ -185,8 +185,8 @@ class SimpleAlert(Alert):
         return self._for_
 
     @property
-    def fire_for(self) -> ql.Duration | None:
-        return self._fire_for
+    def keep_firing_for(self) -> ql.Duration | None:
+        return self._keep_firing_for
 
     @property
     def labels(self) -> dict[str, str]:
@@ -227,7 +227,7 @@ class SimpleAlert(Alert):
             name=name,
             raw_expr=typed_args.get("expr", Expr[RealizedAlert]) or self.expr,  # type: ignore
             for_=typed_args.get("for_", ql.Duration) or self.for_,
-            fire_for=typed_args.get("fire_for", ql.Duration) or self.fire_for,
+            keep_firing_for=typed_args.get("keep_firing_for", ql.Duration) or self.keep_firing_for,
             labels=labels,
             annotations=annotations,
         )
@@ -239,11 +239,11 @@ class RealizedAlert(RealizedRule):
     for_: Annotated[ql.Duration | None, pydantic.Field(serialization_alias="for")] = (
         None
     )
-    fire_for: ql.Duration | None = None
+    keep_firing_for: ql.Duration | None = None
     labels: dict[str, str] = {}
     annotations: dict[str, str] = {}
 
-    @pydantic.field_serializer("for_", "fire_for")
+    @pydantic.field_serializer("for_", "keep_firing_for")
     def _serialize_renderable(self, expr: ql.Renderable | None) -> str | None:
         if expr is None:
             return None
@@ -253,7 +253,7 @@ class RealizedAlert(RealizedRule):
         return {"labels", "annotations"}
 
     def _field_order(self) -> list[str]:
-        return ["alert", "expr", "for", "fire_for", "labels", "annotations"]
+        return ["alert", "expr", "for", "keep_firing_for", "labels", "annotations"]
 
 
 class Recording(Rule["RealizedRecording"], abc.ABC):
@@ -676,7 +676,7 @@ class RuleBundle:
         labels: dict[str, str] | None = None,
         annotations: dict[str, str] | None = None,
         for_: ql.Duration | None = None,
-        fire_for: ql.Duration | None = None,
+        keep_firing_for: ql.Duration | None = None,
     ) -> None:
         pass
 
@@ -784,7 +784,7 @@ class RuleBundle:
         labels: dict[str, str] | None = None,
         annotations: dict[str, str] | None = None,
         for_: ql.Duration | None = None,
-        fire_for: ql.Duration | None = None,
+        keep_firing_for: ql.Duration | None = None,
     ) -> None:
         pass
 
