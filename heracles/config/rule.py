@@ -227,7 +227,8 @@ class SimpleAlert(Alert):
             name=name,
             raw_expr=typed_args.get("expr", Expr[RealizedAlert]) or self.expr,  # type: ignore
             for_=typed_args.get("for_", ql.Duration) or self.for_,
-            keep_firing_for=typed_args.get("keep_firing_for", ql.Duration) or self.keep_firing_for,
+            keep_firing_for=typed_args.get("keep_firing_for", ql.Duration)
+            or self.keep_firing_for,
             labels=labels,
             annotations=annotations,
         )
