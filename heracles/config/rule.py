@@ -206,11 +206,11 @@ class SimpleAlert(Alert):
             raise ValueError("expression must be present to realize alert")
 
         labels = self.labels.copy()
-        if override_labels := typed_args.get("labels", dict[str, str]):
+        if override_labels := typed_args.get("labels", dict):
             labels.update(override_labels)
 
         annotations = self.annotations.copy()
-        if override_annotations := typed_args.get("annotations", dict[str, str]):
+        if override_annotations := typed_args.get("annotations", dict):
             annotations.update(override_annotations)
 
         override_name = typed_args.get("name", str)
@@ -299,7 +299,7 @@ class SimpleRecording(Recording):
             raise ValueError("expression must be present to realize recording rule")
 
         labels = self.labels.copy()
-        if override_labels := typed_args.get("labels", dict[str, str]):
+        if override_labels := typed_args.get("labels", dict):
             labels.update(override_labels)
 
         return RealizedRecording(
