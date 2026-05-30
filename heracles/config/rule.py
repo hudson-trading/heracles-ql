@@ -205,12 +205,12 @@ class SimpleAlert(Alert):
         if not self.expr and not typed_args.get("expr", Expr[RealizedAlert]):  # type: ignore
             raise ValueError("expression must be present to realize alert")
 
-        labels = self.labels or {}
-        if override_labels := typed_args.get("labels", dict[str, str]):
+        labels = self.labels.copy()
+        if override_labels := typed_args.get("labels", dict):
             labels.update(override_labels)
 
-        annotations = self.annotations or {}
-        if override_annotations := typed_args.get("annotations", dict[str, str]):
+        annotations = self.annotations.copy()
+        if override_annotations := typed_args.get("annotations", dict):
             annotations.update(override_annotations)
 
         override_name = typed_args.get("name", str)
@@ -298,8 +298,8 @@ class SimpleRecording(Recording):
         if not self.expr and not typed_args.get("expr", Expr[RealizedRecording]):  # type: ignore
             raise ValueError("expression must be present to realize recording rule")
 
-        labels = self.labels or {}
-        if override_labels := typed_args.get("labels", dict[str, str]):
+        labels = self.labels.copy()
+        if override_labels := typed_args.get("labels", dict):
             labels.update(override_labels)
 
         return RealizedRecording(

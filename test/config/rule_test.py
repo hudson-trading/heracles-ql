@@ -103,6 +103,46 @@ def test_rename_recording_rule() -> None:
     assert config.RuleBundle._rename_recording_rule("a_b_c") == "a:b:c"
 
 
+def test_alert_realization_does_not_mutate_template_metadata() -> None:
+    template = config.SimpleAlert(
+        name="TestingRule",
+        expr=ql.Selector().example_metric,
+        labels={"base": "label"},
+        annotations={"base": "annotation"},
+    )
+
+    first = template.realize(
+        labels={"variant": "first"},
+        annotations={"variant": "first"},
+    )
+    second = template.realize(
+        labels={"variant": "second"},
+        annotations={"variant": "second"},
+    )
+
+    assert first.labels == {"base": "label", "variant": "first"}
+    assert first.annotations == {"base": "annotation", "variant": "first"}
+    assert second.labels == {"base": "label", "variant": "second"}
+    assert second.annotations == {"base": "annotation", "variant": "second"}
+    assert template.labels == {"base": "label"}
+    assert template.annotations == {"base": "annotation"}
+
+
+def test_recording_realization_does_not_mutate_template_labels() -> None:
+    template = config.SimpleRecording(
+        name="testing:rule",
+        expr=ql.Selector().example_metric,
+        labels={"base": "label"},
+    )
+
+    first = template.realize(labels={"variant": "first"})
+    second = template.realize(labels={"variant": "second"})
+
+    assert first.labels == {"base": "label", "variant": "first"}
+    assert second.labels == {"base": "label", "variant": "second"}
+    assert template.labels == {"base": "label"}
+
+
 def test_assertion_extraction() -> None:
     rules = config.RuleBundle(name="test_bundle")
 
