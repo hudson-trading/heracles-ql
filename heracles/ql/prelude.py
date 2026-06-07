@@ -464,23 +464,29 @@ class BinaryOp(InstantVector):
         self.ignoring_labels: list[str] = []
         self.group_by: tuple[str, Iterable[str]] | None = None
 
-    def on(self, *labels: str) -> Self:
+    def _copy_with_label_modifiers(self) -> Self:
         copied = copy.copy(self)
+        copied.on_labels = self.on_labels.copy()
+        copied.ignoring_labels = self.ignoring_labels.copy()
+        return copied
+
+    def on(self, *labels: str) -> Self:
+        copied = self._copy_with_label_modifiers()
         copied.on_labels.extend(labels)
         return copied
 
     def ignoring(self, *labels: str) -> Self:
-        copied = copy.copy(self)
+        copied = self._copy_with_label_modifiers()
         copied.ignoring_labels.extend(labels)
         return copied
 
     def group_left(self, *labels: str) -> Self:
-        copied = copy.copy(self)
+        copied = self._copy_with_label_modifiers()
         copied.group_by = ("group_left", labels)
         return copied
 
     def group_right(self, *labels: str) -> Self:
-        copied = copy.copy(self)
+        copied = self._copy_with_label_modifiers()
         copied.group_by = ("group_right", labels)
         return copied
 

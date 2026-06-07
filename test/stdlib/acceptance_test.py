@@ -223,3 +223,31 @@ def test_all_binops_implemented(
 )
 def test_expressions(expr: ql.Timeseries, result: str) -> None:
     assert ql.format(expr.render()) == result
+
+
+def test_binary_op_label_modifiers_are_isolated() -> None:
+    base = ql.SelectedInstantVector(name="left") * ql.SelectedInstantVector(
+        name="right"
+    )
+    by_host = base.on("host")
+    by_instance = base.on("instance")
+
+    assert base.render() == "(left{} * right{})"
+    assert by_host.render() == "(left{} * on (host) right{})"
+    assert by_instance.render() == "(left{} * on (instance) right{})"
+
+    ignored_job = base.ignoring("job")
+    ignored_env = base.ignoring("env")
+
+    assert base.render() == "(left{} * right{})"
+    assert ignored_job.render() == "(left{} * ignoring (job) right{})"
+    assert ignored_env.render() == "(left{} * ignoring (env) right{})"
+
+    grouped_left = base.group_left("service")
+    grouped_right = base.group_right("cluster")
+    by_pod = base.on("pod")
+
+    assert base.render() == "(left{} * right{})"
+    assert grouped_left.render() == "(left{} * group_left(service) right{})"
+    assert grouped_right.render() == "(left{} * group_right(cluster) right{})"
+    assert by_pod.render() == "(left{} * on (pod) right{})"
