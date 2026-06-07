@@ -129,7 +129,11 @@ class _VisitorFuncWrapper(TimeseriesVisitor):
 
         sig = inspect.signature(func, eval_str=True)
         (param,) = sig.parameters.values()
-        self.accepted_type: type | None = param.annotation
+        self.accepted_type: type | None = (
+            None
+            if param.annotation is inspect.Parameter.empty or param.annotation is Any
+            else param.annotation
+        )
 
     def visit_node(self, v: Any) -> VisitorAction | None:
         if not self.accepted_type or isinstance(v, self.accepted_type):
