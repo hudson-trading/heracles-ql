@@ -4,6 +4,7 @@ from typing import Any
 import pytest
 
 from heracles import ql
+from heracles.ql import assertions
 
 comparison_ops = {
     ql.BinopKind.eq,
@@ -223,3 +224,22 @@ def test_all_binops_implemented(
 )
 def test_expressions(expr: ql.Timeseries, result: str) -> None:
     assert ql.format(expr.render()) == result
+
+
+def test_selected_vector_annotations_are_isolated() -> None:
+    base = ql.SelectedInstantVector(name="up").annotate(assertions.assert_exists)
+    prod = base(job="prod")
+    stage = base(job="stage")
+
+    prod.annotate(assertions.assert_exactly_one("instance"))
+
+    assert [annotation.assertion().render() for annotation in base.annotations] == [
+        "absent(up{})"
+    ]
+    assert [annotation.assertion().render() for annotation in prod.annotations] == [
+        'absent(up{job="prod"})',
+        '(count(up{job="prod"}) by (instance) != 1.0)',
+    ]
+    assert [annotation.assertion().render() for annotation in stage.annotations] == [
+        'absent(up{job="stage"})'
+    ]

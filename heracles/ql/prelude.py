@@ -358,7 +358,7 @@ class SelectedInstantVector(InstantVector):
         res_vec = SelectedInstantVector(name=self.name, **self._selectors)
         # SelectedInstantVector is special - selecting causes this node to be
         # replaced with the selector, so the annotations should propogate
-        res_vec._annotations = self._annotations  # type: ignore
+        res_vec._annotations = self._annotations.copy()  # type: ignore
         for name, value in kwargs.items():
             res_vec._selectors[name] = value
         return res_vec
