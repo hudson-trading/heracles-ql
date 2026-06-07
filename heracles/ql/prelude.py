@@ -728,8 +728,10 @@ class Duration(Renderable):
     def __rmul__(self, o: float | int) -> Duration:
         return Duration._scalar_binop(o, self, operator.mul)
 
-    def __truediv__(self, o: Duration) -> Duration:
-        return self._binop(o, operator.truediv)
+    def __truediv__(self, o: Duration | float | int) -> Duration:
+        if isinstance(o, Duration):
+            return self._binop(o, operator.truediv)
+        return Duration._scalar_binop(self, o, operator.truediv)
 
     def __rtruediv__(self, o: Duration) -> Duration:
         return Duration._scalar_binop(o, self, operator.truediv)
@@ -789,9 +791,9 @@ class Duration(Renderable):
             for unit in sorted_duration_units:
                 res, new_remainder = divmod(remainder, unit.unit_factor())
                 if res > 0 and unit != DurationUnit.millisecond:
-                    parts.append(f"{res}{unit.unit_name()}")
+                    parts.append(f"{_render_duration_value(res)}{unit.unit_name()}")
                 elif unit == DurationUnit.millisecond and remainder != 0:
-                    parts.append(f"{remainder}ms")
+                    parts.append(f"{_render_duration_value(remainder)}ms")
                 remainder = new_remainder
 
             time = "".join(parts)
@@ -807,6 +809,12 @@ class Duration(Renderable):
 
     def __repr__(self) -> str:
         return self.render()
+
+
+def _render_duration_value(value: float) -> str:
+    if isinstance(value, float) and value.is_integer():
+        return str(int(value))
+    return str(value)
 
 
 InstantOrRangeVector = TypeVar("InstantOrRangeVector", InstantVector, RangeVector)

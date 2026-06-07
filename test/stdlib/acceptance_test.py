@@ -214,6 +214,7 @@ def test_all_binops_implemented(
             r'example_vector{instance="\"fo\\.o"}',
         ),
         (5 * ql.Minute, "5m"),
+        (5 * ql.Minute / 2, "2m30s"),
         (0 * ql.Second, "0ms"),
         (
             ql.label_match(ql.SelectedInstantVector(name="test"), "foo", r"foo\|bar"),
