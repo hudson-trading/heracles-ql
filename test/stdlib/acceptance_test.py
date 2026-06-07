@@ -223,3 +223,20 @@ def test_all_binops_implemented(
 )
 def test_expressions(expr: ql.Timeseries, result: str) -> None:
     assert ql.format(expr.render()) == result
+
+
+def test_broad_visitor_functions_visit_all_nodes() -> None:
+    expr = ql.SelectedInstantVector(name="left") + 1
+
+    seen_unannotated: list[str] = []
+    expr.accept_visitor(lambda node: seen_unannotated.append(type(node).__name__))
+
+    seen_any: list[str] = []
+
+    def visit_any(node: Any) -> None:
+        seen_any.append(type(node).__name__)
+
+    expr.accept_visitor(visit_any)
+
+    assert seen_unannotated == ["BinaryOp", "SelectedInstantVector", "ScalarLiteral"]
+    assert seen_any == seen_unannotated
