@@ -1,5 +1,6 @@
 pkg
 build
+dist
 *.pyc
 __pycache__
 uv.lock
