@@ -1,4 +1,5 @@
 VM_VERSION=v1.109.1
+PROM_VERSION=v3.12.0
 GO ?= go
 
 venv:
@@ -25,6 +26,23 @@ check_generated_funcs:
 	$(MAKE) format-lib
 	./codegen/no-changes.sh
 
+download-promql-docs:
+	mkdir -p dist/prom-docs
+	wget "https://raw.githubusercontent.com/prometheus/prometheus/$(PROM_VERSION)/docs/querying/functions.md" -O "dist/prom-docs/functions-$(PROM_VERSION).md"
+	wget "https://raw.githubusercontent.com/prometheus/prometheus/$(PROM_VERSION)/docs/querying/operators.md" -O "dist/prom-docs/operators-$(PROM_VERSION).md"
+
+generate_promql_funcs:
+	$(MAKE) download-promql-docs
+	uv run --all-extras codegen/promql.py "dist/prom-docs/functions-$(PROM_VERSION).md" "dist/prom-docs/operators-$(PROM_VERSION).md" heracles/promql/funcs
+	ruff format --config pyproject.toml heracles/promql/funcs/__init__.py
+	ruff format --config pyproject.toml heracles/promql/funcs/generated.py
+	ruff check --fix --config pyproject.toml heracles/promql/funcs/__init__.py
+	ruff check --fix --config pyproject.toml heracles/promql/funcs/generated.py
+
+check_generated_promql_funcs:
+	$(MAKE) generate_promql_funcs
+	./codegen/no-changes.sh
+
 test:
 	uv run --all-extras pytest ./test
 
@@ -39,4 +57,4 @@ clean:
 	rm --one-file-system -r pkg
 	rm --one-file-system -r wheelhouse
 
-.PHONY: venv dist download-docs generate_funcs test clean format-lib check_generated_funcs
+.PHONY: venv dist download-docs generate_funcs test clean format-lib check_generated_funcs download-promql-docs generate_promql_funcs check_generated_promql_funcs

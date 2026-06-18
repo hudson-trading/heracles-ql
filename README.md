@@ -36,3 +36,27 @@ print(ql.format(my_query.render()))
 
 # rate(my_interesting_metric{useful="label"}[5m])
 ```
+
+## PromQL
+
+HeraclesQL also speaks Prometheus' PromQL. Import `heracles.promql` instead of
+`heracles.ql`: it exposes the same query-building API restricted to the functions and
+aggregators Prometheus supports, and `promql.render` validates that an expression stays
+within the PromQL dialect before rendering it.
+
+```python
+from heracles import promql
+
+v = promql.Selector()
+
+my_query = promql.sum(
+    promql.rate(v.http_requests_total(code="500")[5 * promql.Minute])
+).by("job")
+
+print(promql.render(my_query))
+
+# sum(rate(http_requests_total{code="500"}[5m])) by (job)
+```
+
+The PromQL function and aggregator bindings are generated from the Prometheus
+documentation (`make generate_promql_funcs`), so they track a pinned Prometheus release.
