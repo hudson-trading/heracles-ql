@@ -778,7 +778,7 @@ class Duration(Renderable):
         else:
             interval = ""
         if self.time_value:
-            remainder = self.time_value
+            remainder = abs(self.time_value)
             parts = []
 
             # this needs a type annotation because mypy can't seem
@@ -795,11 +795,17 @@ class Duration(Renderable):
                 remainder = new_remainder
 
             time = "".join(parts)
+            if self.time_value < 0:
+                time = "-" + time
         else:
             time = ""
         if not time and not interval:
             # this duration is 0. Return 0ms.
             return "0ms"
+        if self.time_value < 0 and self.interval_value > 0:
+            # MetricsQL applies a minus sign to all following duration components.
+            # Put the positive interval first so it keeps its own sign.
+            return interval + time
         return "".join((time, interval))
 
     def __str__(self) -> str:
