@@ -6,6 +6,7 @@ import dataclasses
 import functools
 import inspect
 from collections.abc import Callable, Generator, Iterable
+from types import UnionType
 from typing import (
     Annotated,
     Any,
@@ -14,6 +15,9 @@ from typing import (
     Self,
     TypeAlias,
     TypeVar,
+    Union,
+    get_args,
+    get_origin,
     overload,
 )
 
@@ -463,6 +467,18 @@ ContextAlertFunc = ContextRuleFunc[RealizedAlert]
 ContextRecordingFunc = ContextRuleFunc[RealizedRecording]
 
 
+def _annotation_accepts_type(annotation: Any, typ: type) -> bool:
+    origin = get_origin(annotation)
+    if origin is Annotated:
+        return _annotation_accepts_type(get_args(annotation)[0], typ)
+    if origin in (Union, UnionType):
+        return any(_annotation_accepts_type(arg, typ) for arg in get_args(annotation))
+    try:
+        return issubclass(typ, annotation)
+    except TypeError:
+        return False
+
+
 @dataclasses.dataclass
 class WrappedRule(Generic[_Rule, _RealizedRule]):
     partial_fn: ParameterizableRule[_Rule, _RealizedRule]
@@ -529,7 +545,7 @@ class WrappedRule(Generic[_Rule, _RealizedRule]):
             potential_matches = [
                 p
                 for p in potential_matches
-                if p.annotation and issubclass(typ, p.annotation)
+                if _annotation_accepts_type(p.annotation, typ)
             ]
 
         return potential_matches
