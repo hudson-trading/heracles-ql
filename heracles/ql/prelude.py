@@ -371,7 +371,7 @@ class SelectedInstantVector(InstantVector):
             if isinstance(v, Matcher):
                 op = v.kind.value
                 v = v.value
-            return f"{k}{op}{json.dumps(v)}"
+            return f"{k}{op}{json.dumps(v, ensure_ascii=False)}"
 
         for k, v in self._selectors.items():
             if isinstance(v, tuple):
@@ -670,7 +670,7 @@ def _render_any(a: Any) -> str:
     if isinstance(a, Renderable):
         return a.render()
     if isinstance(a, str):
-        return json.dumps(a)
+        return json.dumps(a, ensure_ascii=False)
     return str(a)
 
 
