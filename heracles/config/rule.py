@@ -608,7 +608,7 @@ class RuleBundle:
                 self._context_stack = self._context_stack[:-added]
 
     def _hooks(self) -> Hooks:
-        return Hooks(hooks=self._context_stack)
+        return Hooks(hooks=self._context_stack.copy())
 
     def dump(self) -> Iterable[RealizedRule]:
         for wrapper in self._rules:
